@@ -172,6 +172,9 @@ class FullMatch {
     //BFS trên territories từng ô một
     for (int x = 0; x < rows; x++) {
       for (int y = 0; y < cols; y++) {
+        //if (!isPossibleToMove(x, y)) {
+        //  break;
+        //}
         List<List<bool>> visited = List.generate(
           rows,
           (i) => List.generate(cols, (j) => false),
@@ -211,6 +214,10 @@ class FullMatch {
     logs = matchDetail.logs;
   }
 
+  int manhattanDistance(Cell a, Cell b) {
+    return (a.x - b.x).abs() + (a.y - b.y).abs();
+  }
+
   bool isPossibleToBuild(int x, int y) {
     if (fullBoard.structures[x][y] == CASTLE ||
         fullBoard.walls[x][y] == OPPONENT_WALL ||
@@ -237,53 +244,88 @@ class FullMatch {
       if (strategyOfMason[masonID].isEmpty) {
         //
         //makeRandomBuild:
-        for (int direction = 2; direction <= 8; direction++) {
+        for (int direction = 2; direction <= 8; direction += 2) {
           Cell currentNextMove = Cell(
               x: masonPosition[masonID].x + DX[direction],
               y: masonPosition[masonID].y + DY[direction]);
+          if (!isAvailable(currentNextMove.x, currentNextMove.y)) {
+            continue;
+          }
           if (isPossibleToBuild(currentNextMove.x, currentNextMove.y) &&
               builded.contains(currentNextMove) == false &&
-              isAvailable(currentNextMove.x, currentNextMove.y)) {
-            res.add(Action(type: BUILD, dir: direction, succeeded: false));
+              isAvailable(currentNextMove.x, currentNextMove.y) &&
+              fullBoard.walls[currentNextMove.x][currentNextMove.y] !=
+                  ALLY_WALL) {
+            if (fullBoard.walls[currentNextMove.x][currentNextMove.y] ==
+                OPPONENT_WALL) {
+              res.add(Action(type: DESTROY, dir: direction, succeeded: false));
+            } else
+              res.add(Action(type: BUILD, dir: direction, succeeded: false));
+            // random build
+            print("random build" + masonID.toString());
             builded.add(currentNextMove);
             break;
           }
         }
-        if (res.length != masonID + 1) {
+        if (res.length < masonID) {
+          //stay when no move
+          print("stay when no move1" + masonID.toString());
           res.add(Action(type: STAY, dir: STAY, succeeded: false));
         }
         continue;
         //
       }
-      List<int> tmp = directionToMove[masonPosition[masonID].x]
-              [masonPosition[masonID].y][strategyOfMason[masonID].first.x]
-          [strategyOfMason[masonID].first.y];
+      Cell needToMove = Cell(x: -1000, y: -1000);
 
-      if (tmp.isEmpty) {
-        //
-        //makeRandomBuild:
-        for (int direction = 2; direction <= 8; direction++) {
-          Cell currentNextMove = Cell(
-              x: masonPosition[masonID].x + DX[direction],
-              y: masonPosition[masonID].y + DY[direction]);
-          if (isPossibleToBuild(currentNextMove.x, currentNextMove.y) &&
-              builded.contains(currentNextMove) == false &&
-              isAvailable(currentNextMove.x, currentNextMove.y)) {
-            res.add(Action(type: BUILD, dir: direction, succeeded: false));
-            builded.add(currentNextMove);
-            break;
+      for (int direction = 2; direction <= 8; direction += 2) {
+        Cell tmpStrategy = Cell(
+            x: strategyOfMason[masonID].first.x + DX[direction],
+            y: strategyOfMason[masonID].first.y + DY[direction]);
+        if (isPossibleToBuild(tmpStrategy.x, tmpStrategy.y)) continue;
+        if (strategyOfMason[masonID].length == 1) {
+          if (manhattanDistance(needToMove, masonPosition[masonID]) >
+              manhattanDistance(tmpStrategy, masonPosition[masonID])) {
+            needToMove = tmpStrategy;
+          }
+        } else {
+          if (manhattanDistance(needToMove, strategyOfMason[masonID][1]) >
+              manhattanDistance(tmpStrategy, strategyOfMason[masonID][1])) {
+            needToMove = tmpStrategy;
           }
         }
-        if (res.length != masonID + 1) {
-          res.add(Action(type: STAY, dir: STAY, succeeded: false));
-        }
-        continue;
-        //
       }
+
       bool hasMove = false;
+
+      if (manhattanDistance(
+              masonPosition[masonID], strategyOfMason[masonID].first) ==
+          1) {
+        hasMove = true;
+        // khi đã vừa lòng
+        print("beside strategy" + masonID.toString());
+        print(masonPosition[masonID].x.toString() +
+            " " +
+            masonPosition[masonID].y.toString() +
+            " " +
+            strategyOfMason[masonID].first.x.toString() +
+            " " +
+            strategyOfMason[masonID].first.y.toString());
+        res.add(Action(
+            type: BUILD,
+            dir: directionToMove[masonPosition[masonID].x]
+                            [masonPosition[masonID].y]
+                        [strategyOfMason[masonID].first.x]
+                    [strategyOfMason[masonID].first.y]
+                .first,
+
+            ///Không có đường đi xuống nước
+            succeeded: false));
+        strategyOfMason[masonID].removeAt(0);
+        continue;
+      }
+      // need to move còn bug
       for (int nextDirection in directionToMove[masonPosition[masonID].x]
-              [masonPosition[masonID].y][strategyOfMason[masonID].first.x]
-          [strategyOfMason[masonID].first.y]) {
+          [masonPosition[masonID].y][needToMove.x][needToMove.y]) {
         if (hasMove == true) {
           break;
         }
@@ -298,21 +340,59 @@ class FullMatch {
             OPPONENT_WALL) {
           hasMove == true;
           res.add(Action(type: DESTROY, dir: nextDirection, succeeded: false));
+          print("destroy when has wall" + masonID.toString());
           break;
         }
-        if (strategyOfMason[masonID].first == currentNextMove) {
-          hasMove == true;
-          res.add(Action(type: BUILD, dir: nextDirection, succeeded: false));
-          strategyOfMason[masonID].removeAt(0);
-          break;
-        }
+
         if (hasMasonMove.contains(currentNextMove)) {
           continue;
         }
         hasMove = true;
         res.add(Action(type: MOVE, dir: nextDirection, succeeded: false));
+        print("normal move" +
+            masonID.toString() +
+            " " +
+            needToMove.x.toString() +
+            " " +
+            needToMove.y.toString());
         hasMasonMove.add(currentNextMove);
       }
+
+      List<int> tmp = directionToMove[masonPosition[masonID].x]
+          [masonPosition[masonID].y][needToMove.x][needToMove.y];
+
+      if (tmp.isEmpty) {
+        //
+        //makeRandomBuild:
+        for (int direction = 2; direction <= 8; direction += 2) {
+          Cell currentNextMove = Cell(
+              x: masonPosition[masonID].x + DX[direction],
+              y: masonPosition[masonID].y + DY[direction]);
+          if (isPossibleToBuild(currentNextMove.x, currentNextMove.y) &&
+              builded.contains(currentNextMove) == false &&
+              isAvailable(currentNextMove.x, currentNextMove.y) &&
+              fullBoard.walls[currentNextMove.x][currentNextMove.y] !=
+                  ALLY_WALL) {
+            if (fullBoard.walls[currentNextMove.x][currentNextMove.y] ==
+                OPPONENT_WALL) {
+              res.add(Action(type: DESTROY, dir: direction, succeeded: false));
+            } else
+              res.add(Action(type: BUILD, dir: direction, succeeded: false));
+            // random build
+            print("random build" + masonID.toString());
+            builded.add(currentNextMove);
+            break;
+          }
+        }
+        if (res.length < masonID) {
+          //stay when no move
+          print("stay when no move2" + masonID.toString());
+          res.add(Action(type: STAY, dir: STAY, succeeded: false));
+        }
+        continue;
+        //
+      }
+
       if (hasMove == true) {
         continue;
       }
@@ -326,13 +406,22 @@ class FullMatch {
               y: masonPosition[masonID].y + DY[direction]);
           if (isPossibleToBuild(currentNextMove.x, currentNextMove.y) &&
               builded.contains(currentNextMove) == false &&
-              isAvailable(currentNextMove.x, currentNextMove.y)) {
-            res.add(Action(type: BUILD, dir: direction, succeeded: false));
+              isAvailable(currentNextMove.x, currentNextMove.y) &&
+              fullBoard.walls[currentNextMove.x][currentNextMove.y] !=
+                  ALLY_WALL) {
+            if (fullBoard.walls[currentNextMove.x][currentNextMove.y] ==
+                OPPONENT_WALL) {
+              res.add(Action(type: DESTROY, dir: direction, succeeded: false));
+            } else
+              res.add(Action(type: BUILD, dir: direction, succeeded: false));
+            // random build
+            print("random build" + masonID.toString());
             builded.add(currentNextMove);
             break;
           }
         }
         if (res.length < masonID) {
+          print("stay" + masonID.toString());
           res.add(Action(type: STAY, dir: STAY, succeeded: false));
         }
         continue;

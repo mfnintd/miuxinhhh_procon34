@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:miuxinhhhxnp34/constant.dart';
-import 'package:miuxinhhhxnp34/fullmatch.dart';
 import 'package:miuxinhhhxnp34/match.dart';
 import 'package:miuxinhhhxnp34/league.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // initLeague();
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(milliseconds: 500), (timer) {
       if (gotta) {
         updateCurrentMatch(); // Gọi phương thức cập nhật dữ liệu sau mỗi 5 giây
         if (Provider.of<MatchProvider>(context, listen: false)

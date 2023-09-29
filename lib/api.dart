@@ -14,7 +14,8 @@ Future<void> postAction(int id, int turn, List<Action> actions) async {
   var postResponse = await http.post(Uri.parse('$url/$id?token=$token'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(data));
-  print(postResponse.body);
+  print(jsonEncode(data));
+  //print(postResponse.body);
 }
 
 Future<League> getLeague() async {
