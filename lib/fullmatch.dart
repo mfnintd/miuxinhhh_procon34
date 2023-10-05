@@ -76,6 +76,9 @@ class FullMatch {
   }
 
   void addOrRemoveStrategy(int x, int y) {
+    if (fullBoard.structures[x][y] == CASTLE) {
+      return;
+    }
     if (strategyOfMason[currentMasonID].contains(Cell(x: x, y: y))) {
       strategyOfMason[currentMasonID].remove(Cell(x: x, y: y));
     } else {
@@ -313,17 +316,31 @@ class FullMatch {
             " " +
             strategyOfMason[masonID].first.y.toString());
         */
-        res.add(Action(
-            type: BUILD,
-            dir: directionToMove[masonPosition[masonID].x]
-                            [masonPosition[masonID].y]
-                        [strategyOfMason[masonID].first.x]
-                    [strategyOfMason[masonID].first.y]
-                .first,
+        /// Đoạn này code thêm trường hợp mà nó gặp tường nữa
+        if (fullBoard.walls[strategyOfMason[masonID].first.x]
+                [strategyOfMason[masonID].first.y] ==
+            OPPONENT_WALL) {
+          res.add(Action(
+              type: DESTROY,
+              dir: directionToMove[masonPosition[masonID].x]
+                              [masonPosition[masonID].y]
+                          [strategyOfMason[masonID].first.x]
+                      [strategyOfMason[masonID].first.y]
+                  .first,
+              succeeded: false));
+        } else {
+          res.add(Action(
+              type: BUILD,
+              dir: directionToMove[masonPosition[masonID].x]
+                              [masonPosition[masonID].y]
+                          [strategyOfMason[masonID].first.x]
+                      [strategyOfMason[masonID].first.y]
+                  .first,
 
-            ///Không có đường đi xuống nước
-            succeeded: false));
-        strategyOfMason[masonID].removeAt(0);
+              ///Không có đường đi xuống nước
+              succeeded: false));
+          strategyOfMason[masonID].removeAt(0);
+        }
         continue;
       }
       // need to move còn bug

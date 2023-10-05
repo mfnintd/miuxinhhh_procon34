@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:miuxinhhhxnp34/constant.dart';
+import 'package:miuxinhhhxnp34/fullmatch.dart';
 import 'package:miuxinhhhxnp34/match.dart';
 import 'package:miuxinhhhxnp34/league.dart';
 import 'package:provider/provider.dart';
@@ -35,14 +36,14 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // initLeague();
-    Timer.periodic(Duration(milliseconds: 500), (timer) {
+    Timer.periodic(Duration(milliseconds: 1000), (timer) {
       if (gotta) {
         updateCurrentMatch(); // Gọi phương thức cập nhật dữ liệu sau mỗi 5 giây
         if (Provider.of<MatchProvider>(context, listen: false)
             .allMatches[Provider.of<MatchProvider>(context, listen: false)
                 .currentMatchIndex]
             .isOwnTurn()) {
-          print("turn cua minh day");
+          //print("turn cua minh day");
           var actions = Provider.of<MatchProvider>(context, listen: false)
               .allMatches[Provider.of<MatchProvider>(context, listen: false)
                   .currentMatchIndex]
@@ -153,17 +154,35 @@ class _MyAppState extends State<MyApp> {
                                         ? Color.fromARGB(88, 76, 175, 79)
                                         : Colors.transparent,
                                   ),
+                                  Stack(children: [
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      color: providerWatch.isStrategy(i, j)
+                                          ? Color.fromRGBO(255, 0, 0, 0.6)
+                                          : Colors.transparent,
+                                    ),
+                                    if (providerWatch.isStrategy(i, j))
+                                      Text(
+                                        providerWatch
+                                            .allMatches[
+                                                providerWatch.currentMatchIndex]
+                                            .strategyOfMason[providerWatch
+                                                .allMatches[providerWatch
+                                                    .currentMatchIndex]
+                                                .currentMasonID]
+                                            .indexOf(Cell(x: i, y: j))
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          backgroundColor: Colors.amber[100],
+                                        ),
+                                      ),
+                                  ]),
                                   Container(
                                     height: 30,
                                     width: 30,
-                                    color: providerRead.isStrategy(i, j)
-                                        ? Color.fromRGBO(255, 0, 0, 0.6)
-                                        : Colors.transparent,
-                                  ),
-                                  Container(
-                                    height: 30,
-                                    width: 30,
-                                    color: providerRead.isOtherStrategy(i, j)
+                                    color: providerWatch.isOtherStrategy(i, j)
                                         ? Color.fromRGBO(255, 0, 0, 0.2)
                                         : Colors.transparent,
                                   ),
@@ -174,8 +193,9 @@ class _MyAppState extends State<MyApp> {
                                         .fullBoard
                                         .masons[i][j]),
                                     style: TextStyle(
-                                      color: Colors.red,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
+                                      backgroundColor: Colors.white,
                                     ),
                                   ),
                                 ],
@@ -241,6 +261,13 @@ class _MyAppState extends State<MyApp> {
                                   child: Text(i == 0 ? 'View' : 'Mason ${i}'))
                           ],
                         ),
+                  ElevatedButton(
+                    onPressed: () {
+                      providerRead.allMatches[providerWatch.currentMatchIndex]
+                          .clearStrategy();
+                    },
+                    child: Text('Clear'),
+                  ),
                 ],
               ),
             ),
