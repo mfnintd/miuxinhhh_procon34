@@ -48,7 +48,7 @@ class FullMatch {
   Queue<int> ownTurns = Queue(); // các lượt mà mình chơi
 
   bool isOwnTurn() {
-    return ownTurns.isNotEmpty && turn == ownTurns.first;
+    return ownTurns.isNotEmpty && ownTurns.contains(turn);
   }
 
   // Tạo một mảng 5 chiều [x0][y0][x][y][]
@@ -259,17 +259,18 @@ class FullMatch {
             if (fullBoard.walls[currentNextMove.x][currentNextMove.y] ==
                 OPPONENT_WALL) {
               res.add(Action(type: DESTROY, dir: direction, succeeded: false));
-            } else
+            } else {
               res.add(Action(type: BUILD, dir: direction, succeeded: false));
+            }
             // random build
-            print("random build" + masonID.toString());
+            //print("random build" + masonID.toString());
             builded.add(currentNextMove);
             break;
           }
         }
         if (res.length < masonID) {
           //stay when no move
-          print("stay when no move1" + masonID.toString());
+          //print("stay when no move1" + masonID.toString());
           res.add(Action(type: STAY, dir: STAY, succeeded: false));
         }
         continue;
@@ -281,7 +282,7 @@ class FullMatch {
         Cell tmpStrategy = Cell(
             x: strategyOfMason[masonID].first.x + DX[direction],
             y: strategyOfMason[masonID].first.y + DY[direction]);
-        if (isPossibleToBuild(tmpStrategy.x, tmpStrategy.y)) continue;
+        if (!isPossibleToMove(tmpStrategy.x, tmpStrategy.y)) continue;
         if (strategyOfMason[masonID].length == 1) {
           if (manhattanDistance(needToMove, masonPosition[masonID]) >
               manhattanDistance(tmpStrategy, masonPosition[masonID])) {
@@ -302,7 +303,8 @@ class FullMatch {
           1) {
         hasMove = true;
         // khi đã vừa lòng
-        print("beside strategy" + masonID.toString());
+        // print("beside strategy" + masonID.toString());
+        /*
         print(masonPosition[masonID].x.toString() +
             " " +
             masonPosition[masonID].y.toString() +
@@ -310,6 +312,7 @@ class FullMatch {
             strategyOfMason[masonID].first.x.toString() +
             " " +
             strategyOfMason[masonID].first.y.toString());
+        */
         res.add(Action(
             type: BUILD,
             dir: directionToMove[masonPosition[masonID].x]
@@ -340,7 +343,7 @@ class FullMatch {
             OPPONENT_WALL) {
           hasMove == true;
           res.add(Action(type: DESTROY, dir: nextDirection, succeeded: false));
-          print("destroy when has wall" + masonID.toString());
+          // print("destroy when has wall" + masonID.toString());
           break;
         }
 
@@ -349,12 +352,13 @@ class FullMatch {
         }
         hasMove = true;
         res.add(Action(type: MOVE, dir: nextDirection, succeeded: false));
-        print("normal move" +
+        /* print("normal move" +
             masonID.toString() +
             " " +
             needToMove.x.toString() +
             " " +
             needToMove.y.toString());
+            */
         hasMasonMove.add(currentNextMove);
       }
 

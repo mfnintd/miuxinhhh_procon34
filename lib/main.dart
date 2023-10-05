@@ -42,11 +42,12 @@ class _MyAppState extends State<MyApp> {
             .allMatches[Provider.of<MatchProvider>(context, listen: false)
                 .currentMatchIndex]
             .isOwnTurn()) {
+          print("turn cua minh day");
           var actions = Provider.of<MatchProvider>(context, listen: false)
               .allMatches[Provider.of<MatchProvider>(context, listen: false)
                   .currentMatchIndex]
               .generateAction();
-          postAction(
+          API.postAction(
               Provider.of<MatchProvider>(context, listen: false)
                   .allMatches[Provider.of<MatchProvider>(context, listen: false)
                       .currentMatchIndex]
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     if (Provider.of<MatchProvider>(context, listen: false).allMatches.isEmpty) {
       return;
     }
-    currentMatch = await getMatchByID(
+    currentMatch = await API.getMatchByID(
         Provider.of<MatchProvider>(context, listen: false)
             .allMatches[Provider.of<MatchProvider>(context, listen: false)
                 .currentMatchIndex]
@@ -79,13 +80,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initLeague() async {
-    currentLeague = await getLeague();
+    currentLeague = await API.getLeague();
     context.read<MatchProvider>().initAllMatches(currentLeague);
   }
 
   @override
   Widget build(BuildContext context) {
     var providerRead = context.read<MatchProvider>();
+    final urlController = TextEditingController();
+    final tokenController = TextEditingController();
+    urlController.text = API.url;
+    tokenController.text = API.token;
     // print(context.watch<MatchProvider>().matchesN);
     var providerWatch = context.watch<MatchProvider>();
     return MaterialApp(
@@ -188,38 +193,56 @@ class _MyAppState extends State<MyApp> {
                       ],
                     ),
                   ),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    initLeague();
-                    gotta = true;
-                  },
-                  child: Text("Get"),
-                ),
-                providerWatch.allMatches.isEmpty
-                    ? Text("Không có dữ liệu")
-                    : Column(
-                        children: [
-                          Text(
-                            'Turn ${providerWatch.allMatches[providerWatch.currentMatchIndex].turn}/${providerWatch.allMatches[providerWatch.currentMatchIndex].turns}',
-                          ),
-                          for (int i = 0;
-                              i <=
-                                  providerWatch
-                                      .allMatches[
-                                          providerWatch.currentMatchIndex]
-                                      .fullBoard
-                                      .mason;
-                              i++)
-                            ElevatedButton(
-                                onPressed: () {
-                                  providerRead.changeCurrentMasonID(i);
-                                },
-                                child: Text(i == 0 ? 'View' : 'Mason ${i}'))
-                        ],
-                      ),
-              ],
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              width: 200,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Url: ',
+                    ),
+                    controller: urlController,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Token: ',
+                    ),
+                    controller: tokenController,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      initLeague();
+                      gotta = true;
+                      API.url = urlController.text;
+                      API.token = tokenController.text;
+                    },
+                    child: Text("Get"),
+                  ),
+                  providerWatch.allMatches.isEmpty
+                      ? Text("Không có dữ liệu")
+                      : Column(
+                          children: [
+                            Text(
+                              'Turn ${providerWatch.allMatches[providerWatch.currentMatchIndex].turn}/${providerWatch.allMatches[providerWatch.currentMatchIndex].turns}',
+                            ),
+                            for (int i = 0;
+                                i <=
+                                    providerWatch
+                                        .allMatches[
+                                            providerWatch.currentMatchIndex]
+                                        .fullBoard
+                                        .mason;
+                                i++)
+                              ElevatedButton(
+                                  onPressed: () {
+                                    providerRead.changeCurrentMasonID(i);
+                                  },
+                                  child: Text(i == 0 ? 'View' : 'Mason ${i}'))
+                          ],
+                        ),
+                ],
+              ),
             ),
           ],
         ),
