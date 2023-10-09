@@ -106,7 +106,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               providerWatch.allMatches.isEmpty
                   ? Text("Không có dữ liệu")
-                  : uiMatch(providerWatch: providerWatch, providerRead: providerRead),
+                  : uiMatch(
+                      providerWatch: providerWatch, providerRead: providerRead),
               Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 width: 300,
@@ -265,5 +266,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
