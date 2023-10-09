@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:miuxinhhhxnp34/constant.dart';
-import 'package:miuxinhhhxnp34/fullmatch.dart';
+import 'package:miuxinhhhxnp34/uimatch.dart';
 import 'package:miuxinhhhxnp34/match.dart';
 import 'package:miuxinhhhxnp34/league.dart';
 import 'package:provider/provider.dart';
@@ -106,123 +106,7 @@ class _MyAppState extends State<MyApp> {
             children: [
               providerWatch.allMatches.isEmpty
                   ? Text("Không có dữ liệu")
-                  : Container(
-                      width: providerWatch
-                              .allMatches[providerWatch.currentMatchIndex]
-                              .fullBoard
-                              .width *
-                          30,
-                      //color: Colors.yellow,
-                      child: GridView.count(
-                        padding: const EdgeInsets.all(0),
-                        crossAxisSpacing: 0,
-                        mainAxisSpacing: 0,
-                        crossAxisCount: providerWatch
-                            .allMatches[providerWatch.currentMatchIndex]
-                            .fullBoard
-                            .width,
-                        children: [
-                          for (int i = 0;
-                              i <
-                                  providerWatch
-                                      .allMatches[
-                                          providerWatch.currentMatchIndex]
-                                      .fullBoard
-                                      .height;
-                              i++)
-                            for (int j = 0;
-                                j <
-                                    providerWatch
-                                        .allMatches[
-                                            providerWatch.currentMatchIndex]
-                                        .fullBoard
-                                        .width;
-                                j++)
-                              InkWell(
-                                child: Stack(
-                                  alignment: Alignment.topRight,
-                                  children: [
-                                    Image(
-                                      image: AssetImage(
-                                        'assets/${structures2Text(providerWatch.allMatches[providerWatch.currentMatchIndex].fullBoard.structures[i][j])}${walls2Text(providerWatch.allMatches[providerWatch.currentMatchIndex].fullBoard.walls[i][j])}${masons2Text(providerWatch.allMatches[providerWatch.currentMatchIndex].fullBoard.masons[i][j])}.png',
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 30,
-                                      width: 30,
-                                      color: providerWatch
-                                                  .allMatches[providerWatch
-                                                      .currentMatchIndex]
-                                                  .fullBoard
-                                                  .masons[i][j] ==
-                                              providerWatch
-                                                  .allMatches[providerWatch
-                                                      .currentMatchIndex]
-                                                  .currentMasonID
-                                          ? Color.fromARGB(88, 76, 175, 79)
-                                          : Colors.transparent,
-                                    ),
-                                    Stack(children: [
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        color: providerWatch.isStrategy(i, j)
-                                            ? Color.fromRGBO(255, 0, 0, 0.6)
-                                            : Colors.transparent,
-                                      ),
-                                      if (providerWatch.isStrategy(i, j))
-                                        Text(
-                                          providerWatch
-                                              .allMatches[providerWatch
-                                                  .currentMatchIndex]
-                                              .strategyOfMason[providerWatch
-                                                  .allMatches[providerWatch
-                                                      .currentMatchIndex]
-                                                  .currentMasonID]
-                                              .indexOf(Cell(x: i, y: j))
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            backgroundColor: Colors.amber[100],
-                                          ),
-                                        ),
-                                    ]),
-                                    Container(
-                                      height: 30,
-                                      width: 30,
-                                      color: providerWatch.isOtherStrategy(i, j)
-                                          ? Color.fromRGBO(255, 0, 0, 0.2)
-                                          : Colors.transparent,
-                                    ),
-                                    Text(
-                                      masons2ID(providerWatch
-                                          .allMatches[
-                                              providerWatch.currentMatchIndex]
-                                          .fullBoard
-                                          .masons[i][j]),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        backgroundColor: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  providerRead.addOrRemoveStrategy(i, j);
-                                },
-                                onLongPress: () {
-                                  providerRead.changeCurrentMasonID(
-                                      providerWatch
-                                          .allMatches[
-                                              providerWatch.currentMatchIndex]
-                                          .fullBoard
-                                          .masons[i][j]);
-                                },
-                              )
-                        ],
-                      ),
-                    ),
+                  : uiMatch(providerWatch: providerWatch, providerRead: providerRead),
               Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 width: 300,
@@ -382,45 +266,4 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-String structures2Text(int structure) {
-  if (structure == PLAIN) {
-    return 'plain';
-  } else {
-    if (structure == POND) {
-      return 'pond';
-    } else {
-      return 'castle';
-    }
-  }
-}
 
-String walls2Text(int wall) {
-  if (wall == NO_WALL) {
-    return 'no';
-  } else {
-    if (wall == ALLY_WALL) {
-      return 'ally';
-    } else {
-      return 'opponent';
-    }
-  }
-}
-
-String masons2Text(int mason) {
-  if (mason == 0) {
-    return 'no';
-  } else {
-    if (mason > 0) {
-      return 'ally';
-    } else {
-      return 'opponent';
-    }
-  }
-}
-
-String masons2ID(int mason) {
-  if (mason <= 0)
-    return '';
-  else
-    return mason.toString();
-}
