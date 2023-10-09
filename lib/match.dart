@@ -61,6 +61,49 @@ class FullBoard {
       }
     }
   }
+
+  List<int> numberOfTeritoty() {
+    int allyWall,
+        allyTeritory,
+        allyCastle,
+        opponentWall,
+        opponentTeritory,
+        opponentCastle;
+    allyWall = allyTeritory =
+        opponentWall = opponentTeritory = allyCastle = opponentCastle = 0;
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        if (walls[i][j] == ALLY_WALL) {
+          allyWall++;
+        }
+        if (walls[i][j] == OPPONENT_WALL) {
+          opponentWall++;
+        }
+        if (territories[i][j] == ALLY_TERRITORY) {
+          if (structures[i][j] == CASTLE) {
+            allyCastle++;
+          } else {
+            allyTeritory++;
+          }
+        }
+        if (territories[i][j] == OPPONENT_TERRITORY) {
+          if (structures[i][j] == CASTLE) {
+            opponentCastle++;
+          } else {
+            opponentTeritory++;
+          }
+        }
+      }
+    }
+    return [
+      allyWall,
+      allyTeritory,
+      allyCastle,
+      opponentWall,
+      opponentTeritory,
+      opponentCastle
+    ];
+  }
 }
 
 class Action {

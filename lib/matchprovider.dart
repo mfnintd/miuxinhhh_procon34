@@ -8,11 +8,13 @@ class MatchProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int currentMatchIndex = 0;
   int matchesN = 0;
   List<FullMatch> allMatches = [];
+  List<int> matchIdList = [];
 
   void initAllMatches(League league) {
-    int matchesN = league.matches.length;
+    matchesN = league.matches.length;
     allMatches = List.generate(
         matchesN, (index) => FullMatch.fromMatches(league.matches[index]));
+    matchIdList = List.generate(matchesN, (index) => league.matches[index].id);
     currentMatchIndex = 0;
     notifyListeners();
   }
@@ -31,6 +33,15 @@ class MatchProvider with ChangeNotifier, DiagnosticableTreeMixin {
       currentMatchIndex = matchesN - 1;
     }
     notifyListeners();
+  }
+
+  void goToMatchByID(int id) {
+    if (!matchIdList.contains(id)) {
+      return;
+    } else {
+      currentMatchIndex = matchIdList.indexOf(id);
+      notifyListeners();
+    }
   }
 
   void changeCurrentMasonID(int id) {
@@ -58,5 +69,20 @@ class MatchProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void updateMatchPerTurn(Match matchDetail) {
     allMatches[currentMatchIndex].updateMatchPerTurn(matchDetail);
     notifyListeners();
+  }
+
+  int allyPoint() {
+    var tmp = allMatches[currentMatchIndex].fullBoard.numberOfTeritoty();
+    print(tmp);
+    return tmp[0] * allMatches[currentMatchIndex].bonus.wall +
+        tmp[1] * allMatches[currentMatchIndex].bonus.territory +
+        tmp[2] * allMatches[currentMatchIndex].bonus.castle;
+  }
+
+  int opponentPoint() {
+    var tmp = allMatches[currentMatchIndex].fullBoard.numberOfTeritoty();
+    return tmp[3] * allMatches[currentMatchIndex].bonus.wall +
+        tmp[4] * allMatches[currentMatchIndex].bonus.territory +
+        tmp[5] * allMatches[currentMatchIndex].bonus.castle;
   }
 }

@@ -29,6 +29,7 @@ class FullMatch {
     );
     if (matches.first == false) {
       tmp.fullBoard.swapMasons();
+      print("swap rồi nè");
     }
     return tmp;
   }
