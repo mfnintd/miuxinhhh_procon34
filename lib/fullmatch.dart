@@ -347,6 +347,8 @@ class FullMatch {
       // need to move còn bug?
       for (int nextDirection in directionToMove[masonPosition[masonID].x]
           [masonPosition[masonID].y][needToMove.x][needToMove.y]) {
+        print("mason " + masonID.toString());
+        print(nextDirection);
         if (hasMove == true) {
           break;
         }
