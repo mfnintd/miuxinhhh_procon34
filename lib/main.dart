@@ -281,11 +281,35 @@ class _MyAppState extends State<MyApp> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                            onPressed: () {
-                              providerRead.changeCurrentMasonID(i);
-                            },
-                            child: Text(i == 0 ? 'View' : 'Mason ${i}')),
-                      )
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: i ==
+                                    providerWatch
+                                        .allMatches[
+                                            providerWatch.currentMatchIndex]
+                                        .currentMasonID
+                                ? Colors.redAccent
+                                : Colors.blueAccent,
+                          ),
+                          onPressed: () {
+                            providerRead.changeCurrentMasonID(i);
+                          },
+                          child: Text(i == 0 ? 'View masons' : 'Mason ${i}'),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        child: Text('View tetitory'),
+                        onPressed: () {
+                          providerRead.switchViewTeritoty();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: providerWatch.viewTeritory
+                              ? Colors.redAccent
+                              : Colors.blueAccent,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
           ElevatedButton(

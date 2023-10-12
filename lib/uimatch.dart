@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miuxinhhhxnp34/constant.dart';
 import 'function.dart';
 import 'matchprovider.dart';
 import 'fullmatch.dart';
@@ -95,29 +96,31 @@ class UiMatch extends StatelessWidget {
                           ? Color.fromARGB(88, 76, 175, 79)
                           : Colors.transparent,
                     ),
-                    Stack(children: [
-                      Container(
-                        height: 30,
-                        width: 30,
-                        color: providerWatch.isStrategy(i, j)
-                            ? Color.fromRGBO(255, 0, 0, 0.6)
-                            : Colors.transparent,
-                      ),
-                      if (providerWatch.isStrategy(i, j))
-                        Text(
-                          providerWatch
-                              .allMatches[providerWatch.currentMatchIndex]
-                              .strategyOfMason[providerWatch
-                                  .allMatches[providerWatch.currentMatchIndex]
-                                  .currentMasonID]
-                              .indexOf(Cell(x: i, y: j))
-                              .toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            backgroundColor: Colors.amber[100],
-                          ),
+                    Stack(
+                      children: [
+                        Container(
+                          height: 30,
+                          width: 30,
+                          color: providerWatch.isStrategy(i, j)
+                              ? Color.fromRGBO(255, 0, 0, 0.6)
+                              : Colors.transparent,
                         ),
-                    ]),
+                        if (providerWatch.isStrategy(i, j))
+                          Text(
+                            providerWatch
+                                .allMatches[providerWatch.currentMatchIndex]
+                                .strategyOfMason[providerWatch
+                                    .allMatches[providerWatch.currentMatchIndex]
+                                    .currentMasonID]
+                                .indexOf(Cell(x: i, y: j))
+                                .toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              backgroundColor: Colors.amber[100],
+                            ),
+                          ),
+                      ],
+                    ),
                     Container(
                       height: 30,
                       width: 30,
@@ -135,6 +138,34 @@ class UiMatch extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         backgroundColor: Colors.white,
                       ),
+                    ),
+                    Container(
+                      height: 30,
+                      width: 30,
+                      color: !providerWatch.viewTeritory
+                          ? Colors.transparent
+                          : providerWatch
+                                      .allMatches[
+                                          providerWatch.currentMatchIndex]
+                                      .fullBoard
+                                      .territories[i][j] ==
+                                  ALLY_TERRITORY
+                              ? Colors.green
+                              : providerWatch
+                                          .allMatches[
+                                              providerWatch.currentMatchIndex]
+                                          .fullBoard
+                                          .territories[i][j] ==
+                                      OPPONENT_TERRITORY
+                                  ? Colors.red
+                                  : providerWatch
+                                              .allMatches[providerWatch
+                                                  .currentMatchIndex]
+                                              .fullBoard
+                                              .territories[i][j] ==
+                                          BOTH_TERRITORY
+                                      ? Colors.brown
+                                      : Colors.transparent,
                     ),
                   ],
                 ),

@@ -9,6 +9,12 @@ class MatchProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int matchesN = 0;
   List<FullMatch> allMatches = [];
   List<int> matchIdList = [];
+  bool viewTeritory = false;
+
+  void switchViewTeritoty() {
+    viewTeritory = !viewTeritory;
+    notifyListeners();
+  }
 
   void initAllMatches(League league) {
     matchesN = league.matches.length;
