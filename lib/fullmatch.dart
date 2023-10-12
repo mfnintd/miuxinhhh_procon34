@@ -27,10 +27,10 @@ class FullMatch {
       first: matches.first,
       logs: [],
     );
-    if (matches.first == false) {
-      tmp.fullBoard.swapMasons();
-      // print("swap rồi nè");
-    }
+    //if (matches.first == false) {
+    //  tmp.fullBoard.swapMasons();
+    //  // print("swap rồi nè");
+    //}
     return tmp;
   }
 
@@ -223,9 +223,10 @@ class FullMatch {
   }
 
   bool isPossibleToBuild(int x, int y) {
-    if (fullBoard.structures[x][y] == CASTLE ||
-        fullBoard.walls[x][y] == OPPONENT_WALL ||
-        fullBoard.masons[x][y] != 0) {
+    if (!isAvailable(x, y)) {
+      return false;
+    }
+    if (fullBoard.structures[x][y] == CASTLE || fullBoard.masons[x][y] != 0) {
       return false;
     }
     return true;
@@ -265,10 +266,10 @@ class FullMatch {
               res.add(Action(type: DESTROY, dir: direction, succeeded: false));
             } else {
               res.add(Action(type: BUILD, dir: direction, succeeded: false));
+              builded.add(currentNextMove);
             }
             // random build
             //print("random build" + masonID.toString());
-            builded.add(currentNextMove);
             break;
           }
         }
@@ -280,6 +281,8 @@ class FullMatch {
         continue;
         //
       }
+      // NOTE
+      //có strategy
       Cell needToMove = Cell(x: -1000, y: -1000);
 
       for (int direction = 2; direction <= 8; direction += 2) {
@@ -305,7 +308,6 @@ class FullMatch {
       if (manhattanDistance(
               masonPosition[masonID], strategyOfMason[masonID].first) ==
           1) {
-        hasMove = true;
         // khi đã vừa lòng
         // print("beside strategy" + masonID.toString());
         /*
@@ -457,7 +459,7 @@ class FullMatch {
       if (res.length < masonID) {
         //
         //makeRandomBuild:
-        for (int direction = 2; direction <= 8; direction++) {
+        for (int direction = 2; direction <= 8; direction += 2) {
           Cell currentNextMove = Cell(
               x: masonPosition[masonID].x + DX[direction],
               y: masonPosition[masonID].y + DY[direction]);

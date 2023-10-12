@@ -37,8 +37,9 @@ String masons2Text(int mason) {
 }
 
 String masons2ID(int mason) {
-  if (mason <= 0)
+  if (mason <= 0) {
     return '';
-  else
+  } else {
     return mason.toString();
+  }
 }

@@ -1,12 +1,12 @@
 {
     "teams": [
         {
-            "name": "team1",
-            "token": "token1"
-        },
-        {
             "name": "team2",
             "token": "token2"
+        },
+        {
+            "name": "team1",
+            "token": "token1"
         }
     ],
     "match": {

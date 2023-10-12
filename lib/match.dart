@@ -55,11 +55,13 @@ class FullBoard {
         ));
   }
   void swapMasons() {
+    print(masons);
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         masons[i][j] = -masons[i][j];
       }
     }
+    print(masons);
   }
 
   List<int> numberOfTeritoty() {
