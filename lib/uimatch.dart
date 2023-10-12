@@ -16,7 +16,7 @@ class UiMatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: providerWatch
               .allMatches[providerWatch.currentMatchIndex].fullBoard.width *
           32,
@@ -30,10 +30,10 @@ class UiMatch extends StatelessWidget {
             1,
         children: [
           Container(
-            alignment: Alignment(0.5, 0.5),
+            alignment: const Alignment(0.5, 0.5),
             child: Text(
               (0).toString().padLeft(2, '0'),
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'consolas',
                 fontWeight: FontWeight.bold,
               ),
@@ -45,10 +45,10 @@ class UiMatch extends StatelessWidget {
                       .fullBoard.width;
               j++)
             Container(
-              alignment: Alignment(0.5, 0.5),
+              alignment: const Alignment(0.5, 0.5),
               child: Text(
                 (j + 1).toString().padLeft(2, '0'),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'consolas',
                   fontWeight: FontWeight.bold,
                 ),
@@ -60,10 +60,10 @@ class UiMatch extends StatelessWidget {
                       .fullBoard.height;
               i++) ...[
             Container(
-              alignment: Alignment(0.5, 0.5),
+              alignment: const Alignment(0.5, 0.5),
               child: Text(
                 (i + 1).toString().padLeft(2, '0'),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'consolas',
                   fontWeight: FontWeight.bold,
                 ),
@@ -93,7 +93,7 @@ class UiMatch extends StatelessWidget {
                               providerWatch
                                   .allMatches[providerWatch.currentMatchIndex]
                                   .currentMasonID
-                          ? Color.fromARGB(88, 76, 175, 79)
+                          ? const Color.fromARGB(88, 76, 175, 79)
                           : Colors.transparent,
                     ),
                     Stack(
@@ -102,7 +102,7 @@ class UiMatch extends StatelessWidget {
                           height: 30,
                           width: 30,
                           color: providerWatch.isStrategy(i, j)
-                              ? Color.fromRGBO(255, 0, 0, 0.6)
+                              ? const Color.fromRGBO(255, 0, 0, 0.6)
                               : Colors.transparent,
                         ),
                         if (providerWatch.isStrategy(i, j))
@@ -125,7 +125,7 @@ class UiMatch extends StatelessWidget {
                       height: 30,
                       width: 30,
                       color: providerWatch.isOtherStrategy(i, j)
-                          ? Color.fromRGBO(255, 0, 0, 0.2)
+                          ? const Color.fromRGBO(255, 0, 0, 0.2)
                           : Colors.transparent,
                     ),
                     Text(
@@ -133,7 +133,7 @@ class UiMatch extends StatelessWidget {
                           .allMatches[providerWatch.currentMatchIndex]
                           .fullBoard
                           .masons[i][j]),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         backgroundColor: Colors.white,

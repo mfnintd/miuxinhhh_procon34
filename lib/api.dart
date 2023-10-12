@@ -17,8 +17,8 @@ class API {
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(data),
     );
-    print(jsonEncode(data).toString());
-    print(postResponse.body);
+    //print(jsonEncode(data).toString());
+    //print(postResponse.body);
   }
 
   static Future<League> getLeague() async {

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import '';
 import 'package:miuxinhhhxnp34/uimatch.dart';
 import 'package:miuxinhhhxnp34/match.dart';
 import 'package:miuxinhhhxnp34/league.dart';
@@ -116,11 +115,85 @@ class _MyAppState extends State<MyApp> {
                       margin: const EdgeInsets.all(50),
                       child: Column(
                         children: [
+                          Row(
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                  'assets/plainallyno.png',
+                                ),
+                              ),
+                              const Icon(
+                                Icons.close,
+                                size: 30,
+                              ),
+                              Text(
+                                '${providerWatch.allMatches[providerWatch.currentMatchIndex].bonus.wall}',
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                height: 30,
+                                width: 30,
+                                color: Colors.green,
+                              ),
+                              const Icon(
+                                Icons.close,
+                                size: 30,
+                              ),
+                              Text(
+                                '${providerWatch.allMatches[providerWatch.currentMatchIndex].bonus.territory}',
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                  'assets/castlenono.png',
+                                ),
+                              ),
+                              const Icon(
+                                Icons.close,
+                                size: 30,
+                              ),
+                              Text(
+                                '${providerWatch.allMatches[providerWatch.currentMatchIndex].bonus.castle}',
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
                           Text(
-                              'Time for 1 turn: ${providerWatch.allMatches[providerWatch.currentMatchIndex].turnSeconds} second'),
+                            providerWatch
+                                    .allMatches[providerWatch.currentMatchIndex]
+                                    .first
+                                ? 'You'
+                                : 'Your Opponent' + ' go first',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Text(
+                            'Time for 1 turn: ${providerWatch.allMatches[providerWatch.currentMatchIndex].turnSeconds} second',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
+                          ),
                           Text(
                             'Turn ${providerWatch.allMatches[providerWatch.currentMatchIndex].turn}/${providerWatch.allMatches[providerWatch.currentMatchIndex].turns}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.green,
                               fontSize: 32,
                             ),
@@ -138,15 +211,15 @@ class _MyAppState extends State<MyApp> {
                                 ? MainAxisAlignment.start
                                 : MainAxisAlignment.end,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.arrow_drop_down_outlined,
                                 size: 32,
                                 color: Colors.green,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 30,
                               ),
                             ],
@@ -299,7 +372,7 @@ class _MyAppState extends State<MyApp> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        child: Text('View tetitory'),
+                        child: const Text('View tetitory'),
                         onPressed: () {
                           providerRead.switchViewTeritoty();
                         },

@@ -349,8 +349,8 @@ class FullMatch {
       // need to move còn bug?
       for (int nextDirection in directionToMove[masonPosition[masonID].x]
           [masonPosition[masonID].y][needToMove.x][needToMove.y]) {
-        print("mason " + masonID.toString());
-        print(nextDirection);
+        //print("mason " + masonID.toString());
+        //print(nextDirection);
         if (hasMove == true) {
           break;
         }
@@ -438,14 +438,14 @@ class FullMatch {
               res.add(Action(type: BUILD, dir: direction, succeeded: false));
             }
             // random build
-            print("random build" + masonID.toString());
+            //print("random build" + masonID.toString());
             builded.add(currentNextMove);
             break;
           }
         }
         if (res.length < masonID) {
           //stay when no move
-          print("stay when no move2" + masonID.toString());
+          //print("stay when no move2" + masonID.toString());
           res.add(Action(type: STAY, dir: STAY, succeeded: false));
         }
         continue;
@@ -475,13 +475,13 @@ class FullMatch {
               res.add(Action(type: BUILD, dir: direction, succeeded: false));
             }
             // random build
-            print("random build" + masonID.toString());
+            //print("random build" + masonID.toString());
             builded.add(currentNextMove);
             break;
           }
         }
         if (res.length < masonID) {
-          print("stay" + masonID.toString());
+          //print("stay" + masonID.toString());
           res.add(Action(type: STAY, dir: STAY, succeeded: false));
         }
         continue;
