@@ -19,56 +19,20 @@ class UiMatch extends StatelessWidget {
     return SizedBox(
       width: providerWatch
               .allMatches[providerWatch.currentMatchIndex].fullBoard.width *
-          32,
+          30,
       //color: Colors.yellow,
       child: GridView.count(
         padding: const EdgeInsets.all(0),
         crossAxisSpacing: 0,
         mainAxisSpacing: 0,
         crossAxisCount: providerWatch
-                .allMatches[providerWatch.currentMatchIndex].fullBoard.width +
-            1,
+            .allMatches[providerWatch.currentMatchIndex].fullBoard.width,
         children: [
-          Container(
-            alignment: const Alignment(0.5, 0.5),
-            child: Text(
-              (0).toString().padLeft(2, '0'),
-              style: const TextStyle(
-                fontFamily: 'consolas',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          for (int j = 0;
-              j <
-                  providerWatch.allMatches[providerWatch.currentMatchIndex]
-                      .fullBoard.width;
-              j++)
-            Container(
-              alignment: const Alignment(0.5, 0.5),
-              child: Text(
-                (j + 1).toString().padLeft(2, '0'),
-                style: const TextStyle(
-                  fontFamily: 'consolas',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
           for (int i = 0;
               i <
                   providerWatch.allMatches[providerWatch.currentMatchIndex]
                       .fullBoard.height;
               i++) ...[
-            Container(
-              alignment: const Alignment(0.5, 0.5),
-              child: Text(
-                (i + 1).toString().padLeft(2, '0'),
-                style: const TextStyle(
-                  fontFamily: 'consolas',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             for (int j = 0;
                 j <
                     providerWatch.allMatches[providerWatch.currentMatchIndex]

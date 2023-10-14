@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
           child: Row(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -239,8 +239,9 @@ class _MyAppState extends State<MyApp> {
                                         .allMatches[
                                             providerWatch.currentMatchIndex]
                                         .opponent
-                                        .toString() +
-                                    "\n" +
+                                        .toString()
+                                        .substring(0, 0) +
+                                    "...\n" +
                                     providerWatch.opponentPoint().toString(),
                                 style: const TextStyle(
                                   color: Colors.red,

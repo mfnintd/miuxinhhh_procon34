@@ -5,8 +5,11 @@ import 'package:http/http.dart' as http;
 import 'match.dart';
 
 class API {
-  static String url = 'http://localhost:3000';
-  static String token = 'token1';
+  // static String url = 'http://localhost:3000';
+  static String url = 'http://172.28.0.1:8080';
+
+  static String token =
+      'hanoi527f11adde7925dcd628e2af7afca231e9b7627758c2c89da6e0f3c9d39';
 
   static Future<void> postAction(int id, int turn, List<Action> actions) async {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -24,7 +27,7 @@ class API {
   static Future<League> getLeague() async {
     final response = await http.get(Uri.parse('$url/matches?token=$token'));
     if (response.statusCode == 200) {
-      // print(response.body);
+      //print(response.body);
       return League.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load League');
